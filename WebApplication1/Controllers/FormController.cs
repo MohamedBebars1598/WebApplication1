@@ -88,6 +88,10 @@ namespace WebApplication1.Controllers
             }
 
             _context.Forms.Add(data);
+            _context.Users.Add(new UserEntity()
+            {
+                Email = data.Email,
+            });
             await _context.SaveChangesAsync();
 
             return Ok("Success");
@@ -269,6 +273,18 @@ namespace WebApplication1.Controllers
 
             // Return the image as a file attachment
             return File(imageBytes, contentType, fileName);
+        }
+
+
+        [HttpGet]
+        [Route("CheckEmail")]
+        public async Task<IActionResult> CheckEmail(string email)
+        {
+            var isExist=await _context.Forms.AnyAsync(f => f.Email == email);
+            if (isExist)
+                return Ok();
+
+            return BadRequest("Email not Exist");
         }
 
     }

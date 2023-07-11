@@ -18,5 +18,6 @@ namespace WebApplication1.DataBase
             base.OnModelCreating(builder);
         }
         public DbSet<FormEntity> Forms { get; set; } = default!;
+        public DbSet<UserEntity> Users { get; set; } = default!;
     }
 }
