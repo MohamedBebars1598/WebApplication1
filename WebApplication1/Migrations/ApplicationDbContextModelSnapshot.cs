@@ -104,7 +104,7 @@ namespace WebApplication1.Migrations
                     b.Property<string>("SpouseCountryResidence")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("SpouseDateOfBirth")
+                    b.Property<DateTimeOffset?>("SpouseDateOfBirth")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("SpouseDietaryRequirements")
@@ -113,7 +113,7 @@ namespace WebApplication1.Migrations
                     b.Property<string>("SpouseEmail")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("SpouseExpiryDate")
+                    b.Property<DateTimeOffset?>("SpouseExpiryDate")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("SpouseFirstName")
@@ -125,7 +125,7 @@ namespace WebApplication1.Migrations
                     b.Property<string>("SpouseGender")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("SpouseIssueDate")
+                    b.Property<DateTimeOffset?>("SpouseIssueDate")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("SpouseLastName")

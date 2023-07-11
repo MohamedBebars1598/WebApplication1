@@ -3,6 +3,18 @@ using WebApplication1.DataBase;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var allowedOrigins = builder.Configuration.GetSection("Origins").GetChildren().Select(r => r.Value).ToArray();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+       builder =>
+       {
+           builder.WithOrigins(allowedOrigins)
+           .AllowAnyHeader()
+           .AllowAnyMethod();
+       });
+});
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -29,5 +41,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var appDbContext = scope.ServiceProvider
+        .GetRequiredService<ApplicationDbContext>();
+    // Here is the migration executed
+    appDbContext.Database.Migrate();
+}
 
 app.Run();

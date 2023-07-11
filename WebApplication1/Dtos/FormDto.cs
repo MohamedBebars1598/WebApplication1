@@ -55,15 +55,15 @@ namespace WebApplication1.Dtos
         //⦁	Gender
         public string? SpouseGender { get; set; }
         //⦁	Passport copy 
-        public IFormFile SpousePassportCopy { get; set; }
+        public IFormFile? SpousePassportCopy { get; set; }
         //⦁	Passport Number
         public string? SpousePassportNumber { get; set; }
         //⦁	Issued Date of Passport
-        public DateTimeOffset SpouseIssueDate { get; set; }
+        public DateTimeOffset? SpouseIssueDate { get; set; }
         //⦁	Expiry Date of Passport
-        public DateTimeOffset SpouseExpiryDate { get; set; }
+        public DateTimeOffset? SpouseExpiryDate { get; set; }
         //⦁	Date of Birth
-        public DateTimeOffset SpouseDateOfBirth { get; set; }
+        public DateTimeOffset? SpouseDateOfBirth { get; set; }
         //⦁	Nationality
         public string? SpouseNationality { get; set; }
         //⦁	Country of Residence
