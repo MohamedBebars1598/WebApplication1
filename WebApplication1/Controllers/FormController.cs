@@ -210,7 +210,7 @@ namespace WebApplication1.Controllers
                             host = _configuration["Root:BaseRoot"];
 
                         }
-                        worksheet.Cell(row, 36).SetHyperlink(new XLHyperlink($"https://{host}api/Form/DownloadImage?id={entity.Id}&isFirst=true"));
+                        worksheet.Cell(row, 36).SetHyperlink(new XLHyperlink($"http://{host}api/Form/DownloadImage?id={entity.Id}&isFirst=true"));
                     }
 
                     if (entity.SpousePassportCopy != null)
@@ -223,7 +223,7 @@ namespace WebApplication1.Controllers
                             host = _configuration["Root:BaseRoot"];
 
                         }
-                        worksheet.Cell(row, 37).SetHyperlink(new XLHyperlink($"https://{host}api/Form/DownloadImage?id={entity.Id}&&isFirst=false"));
+                        worksheet.Cell(row, 37).SetHyperlink(new XLHyperlink($"http://{host}api/Form/DownloadImage?id={entity.Id}&&isFirst=false"));
                     }
 
 
