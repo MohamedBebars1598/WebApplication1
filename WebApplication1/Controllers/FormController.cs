@@ -175,7 +175,7 @@ namespace WebApplication1.Controllers
                     worksheet.Cell(row, 16).Value = entity.DietaryRequirements;
                     worksheet.Cell(row, 17).Value = entity.TshirtSize;
                     worksheet.Cell(row, 18).Value = entity.isSpouse ? "Yes" : "No";
-
+                    worksheet.Cell(row, 36).Value = "DownloadImage";
                     if (entity.isSpouse)
                     {
                         // Set cell values for spouse info if it exists
@@ -196,7 +196,6 @@ namespace WebApplication1.Controllers
                         worksheet.Cell(row, 33).Value = entity.SpouseFood;
                         worksheet.Cell(row, 34).Value = entity.SpouseDietaryRequirements;
                         worksheet.Cell(row, 35).Value = entity.SpouseTshirtSize;
-                        worksheet.Cell(row, 36).Value = "DownloadImage";
                         worksheet.Cell(row, 37).Value =entity.SpousePassportCopy==null?"N/A":"DownloadImage";
                     }
 
