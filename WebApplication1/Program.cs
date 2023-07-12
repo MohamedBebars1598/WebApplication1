@@ -5,16 +5,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 var allowedOrigins = builder.Configuration.GetSection("Origins").GetChildren().Select(r => r.Value).ToArray();
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-       builder =>
-       {
-           builder.WithOrigins(allowedOrigins)
-           .AllowAnyHeader()
-           .AllowAnyMethod();
-       });
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddDefaultPolicy(
+//       builder =>
+//       {
+//           builder.WithOrigins(allowedOrigins)
+//           .AllowAnyHeader()
+//           .AllowAnyMethod();
+//       });
+//});
 // Add services to the container.
 
 builder.Services.AddControllers();
