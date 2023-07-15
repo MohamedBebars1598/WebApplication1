@@ -3,14 +3,14 @@ using WebApplication1.DataBase;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var allowedOrigins = builder.Configuration.GetSection("Origins").GetChildren().Select(r => r.Value).ToArray();
+//var allowedOrigins = builder.Configuration.GetSection("Origins").GetChildren().Select(r => r.Value).ToArray();
 
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
        builder =>
        {
-           builder.WithOrigins("*")
+           builder.AllowAnyOrigin()
            .AllowAnyHeader()
            .AllowAnyMethod();
        });

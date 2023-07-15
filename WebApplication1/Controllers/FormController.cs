@@ -1,4 +1,5 @@
-﻿using ClosedXML.Excel;
+﻿using Azure;
+using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Drawing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,13 +37,13 @@ namespace WebApplication1.Controllers
                 ExpiryDate = formDto.ExpiryDate,
                 Food = formDto.Food,
                 Gender = formDto.Gender,
-                isSpouse = formDto.isSpouse,
+                Type = formDto.Type,
                 IssueDate = formDto.IssueDate,
                 MiddleName = formDto.MiddleName,
                 MobileNumber = formDto.MobileNumber,
                 Nationality = formDto.Nationality,
-                //PassportCopy = formDto.PassportCopy,
                 PassportNumber = formDto.PassportNumber,
+                //spouse
                 SpouseAlcohol = formDto.SpouseAlcohol,
                 SpouseCityOfDeparture = formDto.SpouseCityOfDeparture,
                 SpouseCountryResidence = formDto.SpouseCountryResidence,
@@ -58,33 +59,99 @@ namespace WebApplication1.Controllers
                 SpouseMiddleName = formDto.SpouseMiddleName,
                 SpouseMobileNumber = formDto.SpouseMobileNumber,
                 SpouseNationality = formDto.SpouseNationality,
-                //SpousePassportCopy = formDto.SpousePassportCopy,
                 SpousePassportNumber = formDto.SpousePassportNumber,
                 SpouseTshirtSize = formDto.SpouseTshirtSize,
                 TshirtSize = formDto.TshirtSize,
+                //family
+                FamilyMemberAlcohol = formDto.FamilyMemberAlcohol,
+                FamilyMemberCityOfDeparture=formDto.FamilyMemberCityOfDeparture,
+                FamilyMemberCountryResidence = formDto.FamilyMemberCountryResidence,
+                FamilyMemberDateOfBirth = formDto.FamilyMemberDateOfBirth,
+                FamilyMemberDietaryRequirements = formDto.FamilyMemberDietaryRequirements,
+                FamilyMemberEmail = formDto.FamilyMemberEmail,
+                FamilyMemberExpiryDate = formDto.FamilyMemberExpiryDate,
+                FamilyMemberFirstName = formDto.FamilyMemberFirstName,
+                FamilyMemberFood = formDto.FamilyMemberFood,
+                FamilyMemberGender = formDto.FamilyMemberGender,
+                FamilyMemberIssueDate = formDto.FamilyMemberIssueDate,
+                FamilyMemberLastName = formDto.FamilyMemberLastName,
+                FamilyMemberMiddleName = formDto.FamilyMemberMiddleName,
+                FamilyMemberMobileNumber = formDto.FamilyMemberMobileNumber,
+                FamilyMemberNationality = formDto.FamilyMemberNationality,
+                FamilyMemberPassportNumber = formDto.FamilyMemberPassportNumber,
+                FamilyMemberTshirtSize = formDto.FamilyMemberTshirtSize,
+                
+                
+
+
             };
 
             using (var ms = new MemoryStream())
             {
-                //save images
-                if (formDto.PassportCopy != null)
+                //user data
+                ms.Position = 0;
+                ms.SetLength(0);
+                formDto.PassportCopy.CopyTo(ms);
+                var fileBytes = ms.ToArray();
+                data.PassportCopy = fileBytes;
+                ms.Position = 0;
+                ms.SetLength(0);
+                formDto.UserProfilePic.CopyTo(ms);
+                fileBytes = ms.ToArray();
+                data.UserProfilePic = fileBytes;
+                switch (formDto.Type)
                 {
 
-                    ms.Position = 0;
-                    ms.SetLength(0);
-                    formDto.PassportCopy.CopyTo(ms);
-                    var fileBytes = ms.ToArray();
-                    data.PassportCopy = fileBytes;
-                }
+                        case FormTypecs.Spouse:
+                        if (formDto.SpousePassportCopy != null)
+                        {
+                            ms.Position = 0;
+                            ms.SetLength(0);
+                            formDto.SpousePassportCopy.CopyTo(ms);
+                            fileBytes = ms.ToArray();
+                            data.SpousePassportCopy = fileBytes;
+                        }
+                        if (formDto.SpouseProfilePic != null)
+                        {
+                            //spouse profile pic
+                            ms.Position = 0;
+                            ms.SetLength(0);
+                            formDto.SpouseProfilePic.CopyTo(ms);
+                            fileBytes = ms.ToArray();
+                            data.SpouseProfilePic = fileBytes;
+                        }
+                        else
+                        {
+                            return BadRequest("Spouse Profile Pic Cannot be null");
+                        }
+                        break;
 
-                if (formDto.SpousePassportCopy != null)
-                {
-                    ms.Position = 0;
-                    ms.SetLength(0);
-                    formDto.SpousePassportCopy.CopyTo(ms);
-                    var fileBytes = ms.ToArray();
-                    data.SpousePassportCopy = fileBytes;
+                    case FormTypecs.Family:
+                        if (formDto.FamilyMemberPassportCopy != null)
+                        {
+                            ms.Position = 0;
+                            ms.SetLength(0);
+                            formDto.FamilyMemberPassportCopy.CopyTo(ms);
+                            fileBytes = ms.ToArray();
+                            data.FamilyMemberPassportCopy = fileBytes;
+                        }
+                        if (formDto.FamilyMemberProfilePic != null)
+                        {
+                            //family profile pic
+                            ms.Position = 0;
+                            ms.SetLength(0);
+                            formDto.FamilyMemberProfilePic.CopyTo(ms);
+                            fileBytes = ms.ToArray();
+                            data.FamilyMemberProfilePic = fileBytes;
+                        }
+                        else
+                        {
+                            return BadRequest("Family Member Profile Pic Cannot be null");
+                        }
+                        break;
+
                 }
+                
             }
 
             _context.Forms.Add(data);
@@ -109,7 +176,6 @@ namespace WebApplication1.Controllers
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("FormEntities");
-
                 // Set the headers
                 worksheet.Cell(1, 1).Value = "First Name";
                 worksheet.Cell(1, 2).Value = "Middle Name";
@@ -124,30 +190,33 @@ namespace WebApplication1.Controllers
                 worksheet.Cell(1, 11).Value = "City of Departure";
                 worksheet.Cell(1, 12).Value = "Mobile Number";
                 worksheet.Cell(1, 13).Value = "Email Address";
-                worksheet.Cell(1, 14).Value = "Alcohol Requirement";
+                worksheet.Cell(1, 14).Value = "Alcohol";
                 worksheet.Cell(1, 15).Value = "Food Preference";
                 worksheet.Cell(1, 16).Value = "Dietary Requirements";
                 worksheet.Cell(1, 17).Value = "T-shirt size";
-                worksheet.Cell(1, 18).Value = "Spouse – yes or no";
-                worksheet.Cell(1, 19).Value = "Spouse First Name";
-                worksheet.Cell(1, 20).Value = "Spouse Middle Name";
-                worksheet.Cell(1, 21).Value = "Spouse Last Name";
-                worksheet.Cell(1, 22).Value = "Spouse Gender";
-                worksheet.Cell(1, 23).Value = "Spouse Passport Number";
-                worksheet.Cell(1, 24).Value = "Spouse Issue Date of Passport";
-                worksheet.Cell(1, 25).Value = "Spouse Expiry Date of Passport";
-                worksheet.Cell(1, 26).Value = "Spouse Date of Birth";
-                worksheet.Cell(1, 27).Value = "Spouse Nationality";
-                worksheet.Cell(1, 28).Value = "Spouse Country of Residence";
-                worksheet.Cell(1, 29).Value = "Spouse City of Departure";
-                worksheet.Cell(1, 30).Value = "Spouse Mobile Number";
-                worksheet.Cell(1, 31).Value = "Spouse Email Address";
-                worksheet.Cell(1, 32).Value = "Spouse Alcohol Requirement";
-                worksheet.Cell(1, 33).Value = "Spouse Food Preference";
-                worksheet.Cell(1, 34).Value = "Spouse Dietary Requirements";
-                worksheet.Cell(1, 35).Value = "Spouse T-shirt size";
-                worksheet.Cell(1, 36).Value = "Link";
-                worksheet.Cell(1, 37).Value = "Spouse Link";
+                //Accompanied
+                worksheet.Cell(1, 18).Value = "Accompanied Person";
+                worksheet.Cell(1, 19).Value = "Accompanied First Name";
+                worksheet.Cell(1, 20).Value = "Accompanied Middle Name";
+                worksheet.Cell(1, 21).Value = "Accompanied Last Name";
+                worksheet.Cell(1, 22).Value = "AccompaniedGender";
+                worksheet.Cell(1, 23).Value = "Accompanied Passport Number";
+                worksheet.Cell(1, 24).Value = "Accompanied Issue Date of Passport";
+                worksheet.Cell(1, 25).Value = "Accompanied Expiry Date of Passport";
+                worksheet.Cell(1, 26).Value = "Accompanied Date of Birth";
+                worksheet.Cell(1, 27).Value = "Accompanied Nationality";
+                worksheet.Cell(1, 28).Value = "Accompanied Country of Residence";
+                worksheet.Cell(1, 29).Value = "Accompanied City of Departure";
+                worksheet.Cell(1, 30).Value = "Accompanied Mobile Number";
+                worksheet.Cell(1, 31).Value = "Accompanied Email Address";
+                worksheet.Cell(1, 32).Value = "Accompanied Alcohol Requirement";
+                worksheet.Cell(1, 33).Value = "Accompanied Food Preference";
+                worksheet.Cell(1, 34).Value = "Accompanied Dietary Requirements";
+                worksheet.Cell(1, 35).Value = "Accompanied T-shirt size";
+                worksheet.Cell(1, 36).Value = "Passport Copy";
+                worksheet.Cell(1, 37).Value = "Accompanied Passport Copy Link";
+                worksheet.Cell(1, 38).Value = "Profile Picture Link";
+                worksheet.Cell(1, 39).Value = "Accompanied Profile Picture Link";
                 // Add other headers for the remaining properties
 
                 // Populate the data
@@ -174,31 +243,15 @@ namespace WebApplication1.Controllers
                     worksheet.Cell(row, 15).Value = entity.Food;
                     worksheet.Cell(row, 16).Value = entity.DietaryRequirements;
                     worksheet.Cell(row, 17).Value = entity.TshirtSize;
-                    worksheet.Cell(row, 18).Value = entity.isSpouse ? "Yes" : "No";
-                    worksheet.Cell(row, 36).Value = "DownloadImage";
-                    if (entity.isSpouse)
+                    worksheet.Cell(row, 18).Value = entity.Type switch
                     {
-                        // Set cell values for spouse info if it exists
-                        worksheet.Cell(row, 19).Value = entity.SpouseFirstName;
-                        worksheet.Cell(row, 20).Value = entity.SpouseMiddleName;
-                        worksheet.Cell(row, 21).Value = entity.SpouseLastName;
-                        worksheet.Cell(row, 22).Value = entity.SpouseGender;
-                        worksheet.Cell(row, 23).Value = entity.SpousePassportNumber;
-                        worksheet.Cell(row, 24).Value = entity.SpouseIssueDate?.ToString("yyyy-MM-dd");
-                        worksheet.Cell(row, 25).Value = entity.SpouseExpiryDate?.ToString("yyyy-MM-dd");
-                        worksheet.Cell(row, 26).Value = entity.SpouseDateOfBirth?.ToString("yyyy-MM-dd");
-                        worksheet.Cell(row, 27).Value = entity.SpouseNationality;
-                        worksheet.Cell(row, 28).Value = entity.SpouseCountryResidence;
-                        worksheet.Cell(row, 29).Value = entity.SpouseCityOfDeparture;
-                        worksheet.Cell(row, 30).Value = entity.SpouseMobileNumber;
-                        worksheet.Cell(row, 31).Value = entity.SpouseEmail;
-                        worksheet.Cell(row, 32).Value = entity.SpouseAlcohol;
-                        worksheet.Cell(row, 33).Value = entity.SpouseFood;
-                        worksheet.Cell(row, 34).Value = entity.SpouseDietaryRequirements;
-                        worksheet.Cell(row, 35).Value = entity.SpouseTshirtSize;
-                        worksheet.Cell(row, 37).Value =entity.SpousePassportCopy==null?"N/A":"DownloadImage";
-                    }
-
+                        FormTypecs.Classic => "none",
+                        FormTypecs.Family => "Family Member",
+                        FormTypecs.Spouse => "Spouse",
+                        _ => "none",
+                    };
+                    worksheet.Cell(row, 36).Value = "DownloadImage";
+                    worksheet.Cell(row, 38).Value = "DownloadImage";
                     // Create hyperlink to Passport Copy image if available
                     if (entity.PassportCopy != null)
                     {
@@ -210,23 +263,103 @@ namespace WebApplication1.Controllers
                             host = _configuration["Root:BaseRoot"];
 
                         }
-                        worksheet.Cell(row, 36).SetHyperlink(new XLHyperlink($"http://{host}api/Form/DownloadImage?id={entity.Id}&isFirst=true"));
+                        worksheet.Cell(row, 36).SetHyperlink(new XLHyperlink($"http://{host}api/Form/DownloadImage?id={entity.Id}&imageType=1"));
+                        worksheet.Cell(row, 38).SetHyperlink(new XLHyperlink($"http://{host}api/Form/DownloadImage?id={entity.Id}&imageType=1.1"));
                     }
-
-                    if (entity.SpousePassportCopy != null)
+                    switch (entity.Type)
                     {
 
-                        string host = HttpContext.Request.Host.ToString() + '/';
+                        case FormTypecs.Spouse:
+                            // Set cell values for spouse info if it exists
+                            worksheet.Cell(row, 19).Value = entity.SpouseFirstName;
+                            worksheet.Cell(row, 20).Value = entity.SpouseMiddleName??"none";
+                            worksheet.Cell(row, 21).Value = entity.SpouseLastName;
+                            worksheet.Cell(row, 22).Value = entity.SpouseGender;
+                            worksheet.Cell(row, 23).Value = entity.SpousePassportNumber;
+                            worksheet.Cell(row, 24).Value = entity.SpouseIssueDate?.ToString("yyyy-MM-dd");
+                            worksheet.Cell(row, 25).Value = entity.SpouseExpiryDate?.ToString("yyyy-MM-dd");
+                            worksheet.Cell(row, 26).Value = entity.SpouseDateOfBirth?.ToString("yyyy-MM-dd");
+                            worksheet.Cell(row, 27).Value = entity.SpouseNationality;
+                            worksheet.Cell(row, 28).Value = entity.SpouseCountryResidence;
+                            worksheet.Cell(row, 29).Value = entity.SpouseCityOfDeparture;
+                            worksheet.Cell(row, 30).Value = entity.SpouseMobileNumber;
+                            worksheet.Cell(row, 31).Value = entity.SpouseEmail;
+                            worksheet.Cell(row, 32).Value = entity.SpouseAlcohol;
+                            worksheet.Cell(row, 33).Value = entity.SpouseFood;
+                            worksheet.Cell(row, 34).Value = entity.SpouseDietaryRequirements;
+                            worksheet.Cell(row, 35).Value = entity.SpouseTshirtSize;
+                            worksheet.Cell(row, 37).Value = entity.SpousePassportCopy == null ? "none" : "DownloadImage";
+                            worksheet.Cell(row, 39).Value = entity.SpousePassportCopy == null ? "none" : "DownloadImage";
+                            if (entity.SpousePassportCopy != null)
+                            {
+                                string host = HttpContext.Request.Host.ToString() + '/';
 
-                        if (!host.StartsWith("localhost:"))
-                        {
-                            host = _configuration["Root:BaseRoot"];
+                                if (!host.StartsWith("localhost:"))
+                                {
+                                    host = _configuration["Root:BaseRoot"];
 
-                        }
-                        worksheet.Cell(row, 37).SetHyperlink(new XLHyperlink($"http://{host}api/Form/DownloadImage?id={entity.Id}&&isFirst=false"));
+                                }
+                                worksheet.Cell(row, 37).SetHyperlink(new XLHyperlink($"http://{host}api/Form/DownloadImage?id={entity.Id}&&imageType=2"));
+                            }
+                            if (entity.SpouseProfilePic != null)
+                            {
+                                string host = HttpContext.Request.Host.ToString() + '/';
+
+                                if (!host.StartsWith("localhost:"))
+                                {
+                                    host = _configuration["Root:BaseRoot"];
+
+                                }
+                                worksheet.Cell(row, 39).SetHyperlink(new XLHyperlink($"http://{host}api/Form/DownloadImage?id={entity.Id}&&imageType=2.1"));
+                            }
+                            break;
+
+                        case FormTypecs.Family:
+                            worksheet.Cell(row, 19).Value = entity.FamilyMemberFirstName;
+                            worksheet.Cell(row, 20).Value = entity.FamilyMemberMiddleName ?? "none";
+                            worksheet.Cell(row, 21).Value = entity.FamilyMemberLastName;
+                            worksheet.Cell(row, 22).Value = entity.FamilyMemberGender;
+                            worksheet.Cell(row, 23).Value = entity.FamilyMemberPassportNumber;
+                            worksheet.Cell(row, 24).Value = entity.FamilyMemberIssueDate?.ToString("yyyy-MM-dd");
+                            worksheet.Cell(row, 25).Value = entity.FamilyMemberExpiryDate?.ToString("yyyy-MM-dd");
+                            worksheet.Cell(row, 26).Value = entity.FamilyMemberDateOfBirth?.ToString("yyyy-MM-dd");
+                            worksheet.Cell(row, 27).Value = entity.FamilyMemberNationality;
+                            worksheet.Cell(row, 28).Value = entity.FamilyMemberCountryResidence;
+                            worksheet.Cell(row, 29).Value = entity.FamilyMemberCityOfDeparture;
+                            worksheet.Cell(row, 30).Value = entity.FamilyMemberMobileNumber;
+                            worksheet.Cell(row, 31).Value = entity.FamilyMemberEmail;
+                            worksheet.Cell(row, 32).Value = entity.FamilyMemberAlcohol;
+                            worksheet.Cell(row, 33).Value = entity.FamilyMemberFood;
+                            worksheet.Cell(row, 34).Value = entity.FamilyMemberDietaryRequirements;
+                            worksheet.Cell(row, 35).Value = entity.FamilyMemberTshirtSize;
+                            worksheet.Cell(row, 37).Value = entity.FamilyMemberPassportCopy == null ? "none" : "DownloadImage";
+                            worksheet.Cell(row, 39).Value = entity.FamilyMemberProfilePic == null ? "none" : "DownloadImage";
+
+                            if (entity.FamilyMemberPassportCopy != null)
+                            {
+
+                                string host = HttpContext.Request.Host.ToString() + '/';
+
+                                if (!host.StartsWith("localhost:"))
+                                {
+                                    host = _configuration["Root:BaseRoot"];
+
+                                }
+                                worksheet.Cell(row, 37).SetHyperlink(new XLHyperlink($"http://{host}api/Form/DownloadImage?id={entity.Id}&&imageType=3"));
+                            }
+                            if (entity.FamilyMemberProfilePic != null)
+                            {
+                                string host = HttpContext.Request.Host.ToString() + '/';
+
+                                if (!host.StartsWith("localhost:"))
+                                {
+                                    host = _configuration["Root:BaseRoot"];
+
+                                }
+                                worksheet.Cell(row, 39).SetHyperlink(new XLHyperlink($"http://{host}api/Form/DownloadImage?id={entity.Id}&&imageType=3.1"));
+                            }
+                            break;
                     }
-
-
                 }
 
                 // Auto-fit columns
@@ -247,25 +380,39 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         [Route("DownloadImage")]
-        public async Task<IActionResult> DownloadImage([FromQuery]int id, [FromQuery]bool isFirst)
+        public async Task<IActionResult> DownloadImage([FromQuery] int id, [FromQuery] double imageType)
         {
             var data = await _context.Forms.FirstAsync(f => f.Id == id);
-            if (data == null) {
+            if (data == null)
+            {
 
                 return NotFound();
             }
             byte[] imageBytes = new byte[] { };
-            if (isFirst)
+            if (imageType==1)
             {
 
                 imageBytes = data.PassportCopy;
-               
 
-            }
-            else
+
+            }else if (imageType == 1.1)
             {
-                imageBytes = data.SpousePassportCopy??new byte[] { };
+                imageBytes = data.UserProfilePic;
+            }
+            else if (imageType == 2)
+            {
+                imageBytes = data.SpousePassportCopy ?? new byte[] { };
+            }else if (imageType==2.1)
+            {
+                imageBytes = data.SpouseProfilePic ?? new byte[] { };
+            }
+            else if (imageType==3)
+            {
+                imageBytes = data.FamilyMemberPassportCopy ?? new byte[] { };
 
+            }else if (imageType == 3.1)
+            {
+                imageBytes = data.FamilyMemberProfilePic ?? new byte[] { };
             }
             string contentType = "image/jpeg"; // Update this with the appropriate content type for your image
             string fileName = "image.jpg"; // Update this with the desired filename for the downloaded image
@@ -279,7 +426,7 @@ namespace WebApplication1.Controllers
         [Route("CheckEmail")]
         public async Task<IActionResult> CheckEmail(string email)
         {
-            var isExist=await _context.Forms.AnyAsync(f => f.Email == email);
+            var isExist = await _context.Forms.AnyAsync(f => f.Email == email);
             if (isExist)
                 return Ok();
 
