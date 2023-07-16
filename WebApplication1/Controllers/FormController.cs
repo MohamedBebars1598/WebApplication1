@@ -231,9 +231,9 @@ namespace WebApplication1.Controllers
                     // Set cell values for the remaining properties
                     worksheet.Cell(row, 4).Value = entity.Gender;
                     worksheet.Cell(row, 5).Value = entity.PassportNumber;
-                    worksheet.Cell(row, 6).Value = entity.IssueDate.ToString("yyyy-MM-dd");
-                    worksheet.Cell(row, 7).Value = entity.ExpiryDate.ToString("yyyy-MM-dd");
-                    worksheet.Cell(row, 8).Value = entity.DateOfBirth.ToString("yyyy-MM-dd");
+                    worksheet.Cell(row, 6).Value = entity.IssueDate.ToString("dd-MM-yyyy");
+                    worksheet.Cell(row, 7).Value = entity.ExpiryDate.ToString("dd-MM-yyyy");
+                    worksheet.Cell(row, 8).Value = entity.DateOfBirth.ToString("dd-MM-yyyy");
                     worksheet.Cell(row, 9).Value = entity.Nationality;
                     worksheet.Cell(row, 10).Value = entity.CountryResidence;
                     worksheet.Cell(row, 11).Value = entity.CityOfDeparture;
@@ -276,9 +276,9 @@ namespace WebApplication1.Controllers
                             worksheet.Cell(row, 21).Value = entity.SpouseLastName;
                             worksheet.Cell(row, 22).Value = entity.SpouseGender;
                             worksheet.Cell(row, 23).Value = entity.SpousePassportNumber;
-                            worksheet.Cell(row, 24).Value = entity.SpouseIssueDate?.ToString("yyyy-MM-dd");
-                            worksheet.Cell(row, 25).Value = entity.SpouseExpiryDate?.ToString("yyyy-MM-dd");
-                            worksheet.Cell(row, 26).Value = entity.SpouseDateOfBirth?.ToString("yyyy-MM-dd");
+                            worksheet.Cell(row, 24).Value = entity.SpouseIssueDate?.ToString("dd-MM-yyyy");
+                            worksheet.Cell(row, 25).Value = entity.SpouseExpiryDate?.ToString("dd-MM-yyyy");
+                            worksheet.Cell(row, 26).Value = entity.SpouseDateOfBirth?.ToString("dd-MM-yyyy");
                             worksheet.Cell(row, 27).Value = entity.SpouseNationality;
                             worksheet.Cell(row, 28).Value = entity.SpouseCountryResidence;
                             worksheet.Cell(row, 29).Value = entity.SpouseCityOfDeparture;
@@ -320,9 +320,9 @@ namespace WebApplication1.Controllers
                             worksheet.Cell(row, 21).Value = entity.FamilyMemberLastName;
                             worksheet.Cell(row, 22).Value = entity.FamilyMemberGender;
                             worksheet.Cell(row, 23).Value = entity.FamilyMemberPassportNumber;
-                            worksheet.Cell(row, 24).Value = entity.FamilyMemberIssueDate?.ToString("yyyy-MM-dd");
-                            worksheet.Cell(row, 25).Value = entity.FamilyMemberExpiryDate?.ToString("yyyy-MM-dd");
-                            worksheet.Cell(row, 26).Value = entity.FamilyMemberDateOfBirth?.ToString("yyyy-MM-dd");
+                            worksheet.Cell(row, 24).Value = entity.FamilyMemberIssueDate?.ToString("dd-MM-yyyy");
+                            worksheet.Cell(row, 25).Value = entity.FamilyMemberExpiryDate?.ToString("dd-MM-yyyy");
+                            worksheet.Cell(row, 26).Value = entity.FamilyMemberDateOfBirth?.ToString("dd-MM-yyyy");
                             worksheet.Cell(row, 27).Value = entity.FamilyMemberNationality;
                             worksheet.Cell(row, 28).Value = entity.FamilyMemberCountryResidence;
                             worksheet.Cell(row, 29).Value = entity.FamilyMemberCityOfDeparture;
