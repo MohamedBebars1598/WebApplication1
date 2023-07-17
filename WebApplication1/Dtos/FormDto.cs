@@ -50,7 +50,7 @@ namespace WebApplication1.Dtos
 
         //spouse info incase it exists
         //profilePic
-        public IFormFile? SpouseProfilePic { get; set; }
+        //public IFormFile? SpouseProfilePic { get; set; }
         //⦁	First name
         public string? SpouseFirstName { get; set; }
         //⦁	Middle Name
@@ -91,7 +91,7 @@ namespace WebApplication1.Dtos
 
         //Family Member Data
         //profilePic
-        public IFormFile? FamilyMemberProfilePic { get; set; }
+        //public IFormFile? FamilyMemberProfilePic { get; set; }
         public string? FamilyMemberFirstName { get; set; }
         //⦁	Middle Name
         public string? FamilyMemberMiddleName { get; set; }

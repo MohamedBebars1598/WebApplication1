@@ -46,7 +46,7 @@
 
         //====================================>spouse info incase it exists===================================>
         //profilePic
-        public byte[]? SpouseProfilePic { get; set; }
+       // public byte[]? SpouseProfilePic { get; set; }
         //⦁	First name
         public string? SpouseFirstName { get; set; }
         //⦁	Middle Name
@@ -87,7 +87,7 @@
         
         //==============================>Family Member======================================>
         //profilePic
-        public byte[]? FamilyMemberProfilePic { get; set; }
+        //public byte[]? FamilyMemberProfilePic { get; set; }
         //⦁First name
         public string? FamilyMemberFirstName { get; set; }
         //⦁	Middle Name
